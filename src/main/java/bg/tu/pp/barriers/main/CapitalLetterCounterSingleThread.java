@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-public class CapitalLetterCounterSingleThread {
-
-    private static final String FILE_PATH = "/Users/emo/Desktop/facebook-posts-data-2.csv";
+public class CapitalLetterCounterSingleThread implements CapitalLetterCounterConfig {
 
     public static void main(String[] args) {
         try {

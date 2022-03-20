@@ -10,11 +10,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
 
-public class CapitalLetterCounterMultiThreading {
+public class CapitalLetterCounterMultiThreading implements CapitalLetterCounterConfig {
 
+    // set this to the number of threads you wish your program to spawn
     private static final int NUM_THREADS = 3;
-    private static final String FILE_PATH = "/Users/emo/Desktop/facebook-posts-data-2.csv";
     private static CyclicBarrier barrier;
+
+    // the main reference for each thread to post its statistics result to
     private static List<Float> results = new ArrayList<>(NUM_THREADS);
 
     public static void main(String[] args) {
