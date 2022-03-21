@@ -5,6 +5,7 @@ import bg.tu.pp.phasers.threads.ReactionThread;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Phaser;
@@ -26,15 +27,25 @@ public class PhaserRunner {
     public void run() {
         System.out.println("Phase is "+phaser.getPhase());
 
-        for (Map.Entry<String,Player> e : players.entrySet()) {
-            executorService.submit(new ReactionThread(e.getValue(), phaser, slowestPlayer));
+        while (players.size() > 1) {
+            for (Map.Entry<String,Player> e : players.entrySet()) {
+                executorService.submit(new ReactionThread(e.getValue(), phaser, slowestPlayer));
+            }
+
+            phaser.arriveAndAwaitAdvance();
+
+            System.out.println("Phase is "+phaser.getPhase());
+
+            String slowestPlayerName = slowestPlayer.getName();
+            System.out.println("Slowest is "+slowestPlayerName);
+
+            players.remove(slowestPlayerName);
         }
 
-        phaser.arriveAndAwaitAdvance();
+        Optional<Map.Entry<String, Player>> e = players.entrySet().stream().findFirst();
+        String winnerName = e.get().getKey();
 
-        System.out.println("Phase is "+phaser.getPhase());
-
-        System.out.println("Slowest is "+slowestPlayer.getName());
+        System.out.println("And the winner is "+winnerName);
 
         phaser.arriveAndDeregister();
         System.out.println("Main thread deregistered!!!");
